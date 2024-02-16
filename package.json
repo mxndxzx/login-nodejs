@@ -1,0 +1,33 @@
+{
+  "name": "login-nodejs",
+  "version": "1.0.0",
+  "description": "Base de un sistema de login con Javascript",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mxndxzx/login-nodejs.git"
+  },
+  "keywords": [
+    "login"
+  ],
+  "author": "mxndxzx",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/mxndxzx/login-nodejs/issues"
+  },
+  "homepage": "https://github.com/mxndxzx/login-nodejs#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.4",
+    "express": "^4.18.2",
+    "hbs": "^4.2.0",
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
+}
