@@ -3,7 +3,6 @@ const logger = require('../logger/logger.config');
 const bcrypt = require('bcryptjs');
 const { json } = require('body-parser');
 const jwt = require('jsonwebtoken');
-// const { TIME } = require('sequelize');
 
 class Service {
     db = {};
@@ -22,6 +21,7 @@ class Service {
             const res = await this.db.user.findOne({ where: {mail: mail}});
 
             if (! bcrypt.compareSync(pass, res.pass)) { // pw <> dbPw
+                logger.error('Service error:: Bad pass!')
                 return { err: "Bad pass!"};
             }
 
@@ -47,7 +47,7 @@ class Service {
             const exists = await this.db.user.findOne({where : {mail: mail}});
 
             if (exists) {
-                logger.error('Email already exists!');
+                logger.error('Service error:: Email already exists!');
                 return { err: "Email already exists!" };
             }
 

@@ -3,9 +3,7 @@ const logger = require('../logger/logger.config');
 
 class Controller {
     async login (req,res) {
-        logger.info('Controller entry...')
         const response = await service.login(req.body);
-        logger.info('Controller exit:: ' + JSON.stringify(response));
 
         // Response handling
         if (response.data) {
