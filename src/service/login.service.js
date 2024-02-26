@@ -3,6 +3,7 @@ const logger = require('../logger/logger.config');
 const bcrypt = require('bcryptjs');
 const { json } = require('body-parser');
 const jwt = require('jsonwebtoken');
+// const { TIME } = require('sequelize');
 
 class Service {
     db = {};
@@ -10,32 +11,33 @@ class Service {
     constructor() {
         this.db = connect();
         this.db.sequelize.sync().then(() => {
-            console.log('DB Synced!');
+            logger.info('DB Synced!');
         })
     }
 
     async login(body) {
-        await this.db.sequelize.findAll({ emailAdress: body.mail}, (err, userDb) => {
-            if (err) {
-                return err;
+        try {
+            let { mail, pass } = body;
+
+            const res = await this.db.user.findOne({ where: {mail: mail}});
+
+            if (! bcrypt.compareSync(pass, res.pass)) { // pw <> dbPw
+                return { err: "Bad pass!"};
             }
 
-            if (!userDb) {
-                return false; // TODO Json
-            }
-
-            if (! bcrypt.compareSync(body.password, userDb.password)) { // pw <> dbPw
-                return false; // TODO Json
-            }
+            res.update({lastLogin: new Date()});
 
             let token = jwt.sign({
-                user: userDb
+                user: res,
             }, process.env.AUTH_SEED, {
-                expiresIn: process.env.EXPIRES_IN
+                expiresIn: process.env.TOKEN_TIME
             })
 
-            return userDb, token;
-        })
+            return { data: res, token: token };
+        } catch (err) {
+            logger.error('Service error:: ' + err);
+            return { err: err };
+        }
     }
 
     async register(body) {
@@ -52,7 +54,8 @@ class Service {
             const response = await this.db.user.create({
                 username: username,
                 mail: mail,
-                pass: bcrypt.hashSync(pass, 10)
+                pass: bcrypt.hashSync(pass, 10),
+                lastLogin: new Date()
             })
 
             return { data: response };

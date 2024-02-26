@@ -22,11 +22,16 @@ module.exports = (sequelize, DataTypes, Model) => {
             type: DataTypes.STRING(250),
             allowNull: false
         },
+
+        lastLogin: {
+            type: DataTypes.DATE,
+            allowNull: false
+        }
     }, {
         tableName: process.env.DBTABLE,
         modelName: 'User',
         createdAt: true,
-        updatedAt: 'lastLogin',
+        updatedAt: false,
         sequelize
     })
 
