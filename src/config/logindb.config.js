@@ -24,9 +24,9 @@ const connect = () => {
     async function auth() {
         try {
             await sequelize.authenticate();
-            console.log('DB Authenticated!');
+            logger.info('DB Authenticated!');
         } catch (err) {
-            console.log('Error authenticating into DB:: ' + err);
+            logger.error('Error authenticating into DB:: ' + err);
             return err;
         }
     }
